@@ -49,7 +49,7 @@ fi
 echo "Activating virtual environment and installing required Python packages..."
 source venv/bin/activate
 python3.12 -m pip install --upgrade pip
-python3.12 -m pip install --upgrade numpy matplotlib pandas torch transformers jupyterlab
+python3.12 -m pip install --upgrade numpy matplotlib pandas torch transformers jupyterlab ipykernel ipywidgets
 
 echo "Setup script completed successfully!"
 
