@@ -12,10 +12,10 @@ To begin the lab, follow these steps:
    ./setup.sh
    ```
 
-2. **Open up the course material**
-   The course material is provided as Jupyter notebooks. To access the content, activate the virtual        environment and launch Jupyter Lab:
+2. **Open up the course material**  
+   The course material is provided as Jupyter notebooks. To access the content, activate the virtual environment and launch Jupyter Lab:
    ```bash
    source venv/bin/activate
 
    jupyter lab 
-   ```
+   
