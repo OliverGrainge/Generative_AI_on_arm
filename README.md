@@ -1,6 +1,6 @@
 # Generative AI on ARM
 
-Welcome to the **Generative AI on ARM** course! This course focuses on optimizing generative AI workloads for ARM architectures, guiding you through hands-on labs and practical implementations. There are two labs on this course. lab1 that focusses on mobile devices such as the Raspberry Pi 5 and lab2 that works with graviton based servers. In each, lab you will learn how to optimize generative AI iference by harnessing the powerful intrinsics of ARM devices. 
+Welcome to the **Generative AI on ARM** course! This course focuses on optimizing generative AI workloads for ARM architectures, guiding you through hands-on labs and practical implementations. There are two labs on this course. Lab1 that focusses on mobile devices such as the Raspberry Pi 5 and lab2 that works with Graviton based servers. In each, lab you will learn how to optimize generative AI inference by harnessing the powerful intrinsics of ARM devices. 
 
 ## Getting Started
 
