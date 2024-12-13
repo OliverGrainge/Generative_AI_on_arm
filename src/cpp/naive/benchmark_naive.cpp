@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <vector>
 #include "kernel.h"
 
 void loadMatrix(const std::string& filename, float* matrix, size_t rows, size_t cols) {
