@@ -8,3 +8,5 @@ bin/
 src/.DS_Store
 .ipynb_checkpoints/
 .DS_Store
+src/c/kernels/
+*kernel.cpp*
