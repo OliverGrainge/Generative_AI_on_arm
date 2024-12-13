@@ -1,7 +1,10 @@
-checkpoints/
-src/cpp/assets/
+checkpoints/*
+src/cpp/assets/*
 llama.cpp/
-kelidiai/
+kleidiai/
 *.npy
 *.bin
 bin/
+src/.DS_Store
+.ipynb_checkpoints/
+.DS_Store
