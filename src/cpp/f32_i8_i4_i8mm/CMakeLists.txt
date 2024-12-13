@@ -3,6 +3,8 @@ project(benchmark_i8mm)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Paths
 set(KLEIDIAI_PATH ../../../kleidiai/)
 set(MATMUL_PACK_PATH ${KLEIDIAI_PATH}/kai/ukernels/matmul/pack/)
 set(MATMUL_PATH ${KLEIDIAI_PATH}/kai/ukernels/matmul/matmul_clamp_f32_qsi8d32p_qsi4c32p/)
@@ -14,7 +16,7 @@ include_directories(
     ${MATMUL_PATH}
 )
 
-# Files requires to build the executable
+# Executable
 add_executable(benchmark_i8mm
     benchmark_i8mm.cpp
     kernel.cpp
@@ -23,10 +25,12 @@ add_executable(benchmark_i8mm
     ${MATMUL_PACK_PATH}/kai_lhs_quant_pack_qsi8d32p_f32.c
 )
 
+# Compilation options
 target_compile_options(benchmark_i8mm
-    PRIVATE -march=armv8.2-a
+    PRIVATE -mcpu=neoverse-v1+crc+aes+sha3+sm4
 )
 
+# Debug definitions
 target_compile_definitions(benchmark_i8mm
     PRIVATE $<$<CONFIG:Debug>:KAI_DEBUG>
 )
