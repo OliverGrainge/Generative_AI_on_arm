@@ -1,0 +1,7 @@
+checkpoints/
+src/cpp/assets/
+llama.cpp/
+kelidiai/
+*.npy
+*.bin
+bin/
