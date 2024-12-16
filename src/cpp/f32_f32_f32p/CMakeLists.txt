@@ -23,7 +23,7 @@ add_executable(benchmark_f32
 )
 
 target_compile_options(benchmark_f32
-    PRIVATE -march=armv8.2-a
+    PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1
 )
 
 target_compile_definitions(benchmark_f32

@@ -27,7 +27,7 @@ add_executable(benchmark_i8mm
 
 # Compilation options
 target_compile_options(benchmark_i8mm
-    PRIVATE -mcpu=neoverse-v1+crc+aes+sha3+sm4
+    PRIVATE -march=armv8.4-a+sve+i8mm -mtune=neoverse-v1
 )
 
 # Debug definitions

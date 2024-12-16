@@ -32,12 +32,10 @@ int main() {
 
 
     auto start = std::chrono::high_resolution_clock::now();
-    for (int round = 0; round < 3; round++) {
-        matrix_multiply_naive(X.data(), W.data(), Y.data(), activation_rows, activation_cols, weight_cols);
-    }
+    matrix_multiply_naive(X.data(), W.data(), Y.data(), activation_rows, activation_cols, weight_cols);
     auto end = std::chrono::high_resolution_clock::now();
     
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 3.0;
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "Time taken: " << duration << " milliseconds" << std::endl;
 
     return 0;

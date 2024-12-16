@@ -24,7 +24,7 @@ add_executable(benchmark_dotprod
 )
 
 target_compile_options(benchmark_dotprod
-    PRIVATE -march=armv8.2-a
+    PRIVATE -march=armv8.4-a+sve+dotprod -mtune=neoverse-v1
 )
 
 target_compile_definitions(benchmark_dotprod

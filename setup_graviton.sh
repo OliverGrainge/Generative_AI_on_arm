@@ -8,12 +8,9 @@ sudo apt upgrade -y
 # Install essential development packages
 echo "Installing required packages..."
 sudo apt install -y wget build-essential libssl-dev libbz2-dev libreadline-dev libsqlite3-dev \
-    zlib1g-dev libncurses-dev libffi-dev libgdbm-dev liblzma-dev uuid-dev tk-dev
+    zlib1g-dev libncurses-dev libffi-dev libgdbm-dev liblzma-dev uuid-dev tk-dev python3.12-venv linux-tools-common linux-tools-$(uname -r) python3-pip
 
-sudo apt install -y python3.12-venv
-sudo apt install -y linux-tools-common linux-tools-$(uname -r)
-sudo apt install -y python3-pip
-
+sudo apt -y install cmake
 # Verify perf installation
 if command -v perf >/dev/null 2>&1; then
     echo "perf installed successfully."
