@@ -11,6 +11,7 @@ sudo apt install -y wget build-essential libssl-dev libbz2-dev libreadline-dev l
     zlib1g-dev libncurses-dev libffi-dev libgdbm-dev liblzma-dev uuid-dev tk-dev python3.12-venv linux-tools-common linux-tools-$(uname -r) python3-pip libblas-dev
 
 sudo apt -y install cmake
+sudo apt-get install libelf-dev cmake clang llvm llvm-dev -y
 # Verify perf installation
 if command -v perf >/dev/null 2>&1; then
     echo "perf installed successfully."

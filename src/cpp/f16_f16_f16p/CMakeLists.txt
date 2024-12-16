@@ -30,11 +30,21 @@ add_executable(benchmark_f16_scaling
     ${MATMUL_PACK_PATH}/kai_rhs_pack_kxn_f16p16x1biasf16_f16_f16_neon.c
 )
 
+add_executable(kai_f16_inf
+    kai_f16_inf.cpp#
+    kernel.cpp
+    ${MATMUL_PATH}/kai_matmul_clamp_f16_f16_f16p16x1biasf16_6x16x8_neon_mla.c
+    ${MATMUL_PACK_PATH}/kai_rhs_pack_kxn_f16p16x1biasf16_f16_f16_neon.c
+)
 target_compile_options(benchmark_f16
     PRIVATE -march=armv8.4-a+fp16+sve -mtune=neoverse-v1
 )
 
 target_compile_options(benchmark_f16_scaling
+    PRIVATE -march=armv8.4-a+fp16+sve -mtune=neoverse-v1
+)
+
+target_compile_options(kai_f16_inf
     PRIVATE -march=armv8.4-a+fp16+sve -mtune=neoverse-v1
 )
 

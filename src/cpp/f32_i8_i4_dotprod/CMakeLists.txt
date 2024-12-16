@@ -32,11 +32,24 @@ add_executable(benchmark_dotprod_scaling
     ${MATMUL_PACK_PATH}/kai_lhs_quant_pack_qsi8d32p_f32.c
 )
 
+add_executable(kai_i8_dotprod_inf
+    kai_i8_dotprod_inf.cpp
+    kernel.cpp
+    ${MATMUL_PATH}/kai_matmul_clamp_f32_qsi8d32p1x8_qsi4c32p4x8_1x4x32_neon_dotprod.c
+    ${MATMUL_PACK_PATH}/kai_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0.c
+    ${MATMUL_PACK_PATH}/kai_lhs_quant_pack_qsi8d32p_f32.c
+)
+
+
 target_compile_options(benchmark_dotprod
     PRIVATE -march=armv8.4-a+sve+dotprod -mtune=neoverse-v1
 )
 
 target_compile_options(benchmark_dotprod_scaling
+    PRIVATE -march=armv8.4-a+sve+dotprod -mtune=neoverse-v1
+)
+
+target_compile_options(kai_i8_dotprod_inf
     PRIVATE -march=armv8.4-a+sve+dotprod -mtune=neoverse-v1
 )
 

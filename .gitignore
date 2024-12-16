@@ -11,4 +11,6 @@ src/.DS_Store
 src/c/kernels/
 *kernel.cpp*
 **build/*
-**build/
+**build/.vscode/
+my_env/
+processwatch/

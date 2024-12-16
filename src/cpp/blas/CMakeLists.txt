@@ -8,25 +8,36 @@ project(BlasScalingBenchmark VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Specify the executable
+# Specify the executables
 add_executable(blas_scaling_benchmark benchmark_f32.cpp)
+add_executable(blas_f32_inf f32_inf.cpp)
 
 # Find and link BLAS library
 find_package(BLAS REQUIRED)
+
 if (BLAS_FOUND)
+    message(STATUS "BLAS library found: ${BLAS_LIBRARIES}")
     target_link_libraries(blas_scaling_benchmark PUBLIC ${BLAS_LIBRARIES})
+    target_link_libraries(blas_f32_inf PUBLIC ${BLAS_LIBRARIES})
 else()
     message(FATAL_ERROR "BLAS library not found!")
 endif()
 
 # Include BLAS directories if required
 if (BLAS_INCLUDE_DIRS)
+    message(STATUS "Using BLAS include directories: ${BLAS_INCLUDE_DIRS}")
     target_include_directories(blas_scaling_benchmark PUBLIC ${BLAS_INCLUDE_DIRS})
+    target_include_directories(blas_f32_inf PUBLIC ${BLAS_INCLUDE_DIRS})
 endif()
 
-# Add any additional compiler flags if needed
-target_compile_options(blas_scaling_benchmark PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1)
+# Add architecture-specific compiler flags (NEON or SVE)
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64") # Check if ARM architecture
+    message(STATUS "ARM architecture detected; adding NEON/SVE flags")
+    target_compile_options(blas_scaling_benchmark PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1)
+    target_compile_options(blas_f32_inf PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1)
+else()
+    message(WARNING "Non-ARM architecture detected; skipping NEON/SVE flags")
+endif()
 
-
-# Specify the output directory for binaries
-set_target_properties(blas_scaling_benchmark PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+# Optional: Specify installation rules (if needed)
+install(TARGETS blas_scaling_benchmark blas_f32_inf DESTINATION bin)
