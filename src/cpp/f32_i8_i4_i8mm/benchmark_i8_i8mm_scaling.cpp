@@ -272,10 +272,10 @@ int main() {
         ref_quant_qs8d32_f32(m, k, bl, (const float*)X.data(), (uint8_t*)lhs_ref_mtx_qa8d32);
 
 
-
-
-        const size_t lhs_packed_size = kai_get_lhs_packed_size_lhs_quant_pack_qsi8d32p_f32(m, k, bl, mr, kr, sr);
         const size_t rhs_packed_size = kai_get_rhs_packed_size_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0(n, k, nr, kr, bl);
+        auto start = std::chrono::high_resolution_clock::now();
+        const size_t lhs_packed_size = kai_get_lhs_packed_size_lhs_quant_pack_qsi8d32p_f32(m, k, bl, mr, kr, sr);
+        
         const size_t dst_size = ukernel.get_dst_size(m, n);
 
         uint8_t* lhs_packed_mtx_qs8d32 = new uint8_t[lhs_packed_size];
@@ -285,25 +285,6 @@ int main() {
         struct kai_rhs_pack_qs4cxs1s0_param params;
         params.lhs_zero_point = 1;
         params.rhs_zero_point = 8;
-        /*
-        kai_run_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0(
-                1, n, k,                                  // Dimensions
-                nr, kr, sr,                               // Packing arguments
-                bl,                                       // Block length
-                (const uint8_t*)(rhs_native_mtx_qs4c32),  // RHS
-                NULL,                                     // Bias
-                rhs_packed_mtx_qs4c32,                    // RHS packed
-                0, &params);
-        */
-    ref_matmul_f32_qs8d32_qs4c32(
-            m, n, k, bl, (const int8_t*)lhs_ref_mtx_qa8d32, (const uint8_t*)rhs_native_mtx_qs4c32, (float*)dst_ref_mtx_f32,
-            -FLT_MAX, FLT_MAX);
-
-        // If the RHS matrix contains constant values, the packing can be performed
-        // only once
-
-
-        
 
         const size_t dst_stride = n * sizeof(float);
         const size_t lhs_offset = ukernel.get_lhs_packed_offset(0, k, bl);
@@ -313,8 +294,6 @@ int main() {
         const void* lhs_ptr = (const void*)((const char*)lhs_packed_mtx_qs8d32 + lhs_offset);
         const void* rhs_ptr = (const void*)((const char*)rhs_packed_mtx_qs4c32 + rhs_offset);
         float* dst_ptr = (float*)((uint8_t*)dst_act_mtx_f32 + dst_offset);
-
-        auto start = std::chrono::high_resolution_clock::now();
         
         ukernel.run_matmul(
             m, n, k, bl,       // Dimensions

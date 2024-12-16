@@ -51,6 +51,8 @@ int main() {
         //float* bias = new float[N];
         float* bias = new float[N];
         std::fill_n(bias, N, 0.0f);
+        float* dst = Y.data();
+        auto start = std::chrono::high_resolution_clock::now();
         kai_run_rhs_pack_kxn_f32p8x1biasf32_f32_f32_neon(
             1, N, K, nr, kr, sr,  // Packing arguments
             rhs_stride,           // RHS stride
@@ -60,8 +62,6 @@ int main() {
             rhs_packed,           // RHS packed
             0, NULL);
 
-        float* dst = Y.data();
-        auto start = std::chrono::high_resolution_clock::now();
 
         ukernel.run_matmul(
             M, N, K,           // Dimensions
