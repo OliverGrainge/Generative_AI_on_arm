@@ -96,10 +96,9 @@ int main() {
         -FLT_MAX, FLT_MAX  // Min and max for the clamp operation
     );
 
-    
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << std::fixed << std::setprecision(3) << "Time taken: " << duration/3000.0 << " milliseconds" << std::endl;
+    double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
+    std::cout << "Time taken: " << duration << " microseconds" << std::endl;
     
     return 0;
 }

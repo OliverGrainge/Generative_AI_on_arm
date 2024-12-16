@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "../common/sizes.cpp"
 #include "kernel.cpp"
 #include "kai_lhs_quant_pack_qsi8d32p_f32.h"
 #include "kai_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0.h"
@@ -11,6 +12,7 @@
 #include <cstddef>
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 
 
 void loadMatrix(const char* filename, float* matrix, size_t rows, size_t cols) {
@@ -219,110 +221,114 @@ static void ref_matmul_f32_qs8d32_qs4c32(
 
 
 int main() {
-    // Declare matrix dimensions
-    const size_t activation_rows = 6, activation_cols = 1280;
-    const size_t weight_rows = 1280, weight_cols = 32000;
+    std::ofstream csv_file("../../results/i8_i8mm_scaling_results.csv");
+    // Write header
+    csv_file << "Size,Latency(us)\n";
 
-    std::vector<float> X(activation_rows * activation_cols);
-    std::vector<float> W(weight_rows * weight_cols);
-    std::vector<float> Y(activation_rows * weight_cols, 0.0f);  // Initialize with zeros
+    for (int size: sizes) {
 
-    size_t M = activation_rows; 
-    size_t N = weight_cols;
-    size_t K = activation_cols;
+        std::vector<float> X(size * size);
+        std::vector<float> W(size * size);
+        std::vector<float> Y(size * size, 0.0f);  // Initialize with zeros
 
-    loadMatrix("../../assets/x_fp32.bin", X.data(), activation_rows, activation_cols);
-    loadMatrix("../../assets/w_fp32.bin", W.data(), weight_rows, weight_cols);
+        std::generate(X.begin(), X.end(), []() { return static_cast<float>(rand()) / RAND_MAX; });
+        std::generate(W.begin(), W.end(), []() { return static_cast<float>(rand()) / RAND_MAX; });
 
-    float* lhs = X.data();
-    float* rhs = W.data();
+        size_t M = size; 
+        size_t N = size;
+        size_t K = size;
 
-    const size_t mr = ukernel.get_mr();
-    const size_t nr = ukernel.get_nr();
-    const size_t kr = ukernel.get_kr();
-    const size_t sr = ukernel.get_sr();
+        float* lhs = X.data();
+        float* rhs = W.data();
 
-    const size_t bl = 32;  // Block length. It must be 32
-    const size_t m = activation_rows;
-    const size_t n = weight_cols;
-    const size_t k = activation_cols;
-    const size_t seed_lhs = 4568;
-    const size_t seed_rhs = seed_lhs + 4;
-    
-    const size_t num_blocks = k / bl;
-    const size_t num_bytes_per_block_qs4c32 = (bl / 2) + sizeof(int16_t);
-    const size_t num_bytes_per_block_qs8c32 = bl + sizeof(int16_t);
+        const size_t mr = ukernel.get_mr();
+        const size_t nr = ukernel.get_nr();
+        const size_t kr = ukernel.get_kr();
+        const size_t sr = ukernel.get_sr();
 
-    const size_t rhs_native_size_qs4c32 = n * num_blocks * num_bytes_per_block_qs4c32;
-    uint8_t* rhs_native_mtx_qs4c32 = new uint8_t[rhs_native_size_qs4c32];
+        const size_t bl = 32;  // Block length. It must be 32
+        const size_t m = size;
+        const size_t n = size;
+        const size_t k = size;
+        const size_t seed_lhs = 4568;
+        const size_t seed_rhs = seed_lhs + 4;
+        
+        const size_t num_blocks = k / bl;
+        const size_t num_bytes_per_block_qs4c32 = (bl / 2) + sizeof(int16_t);
+        const size_t num_bytes_per_block_qs8c32 = bl + sizeof(int16_t);
 
-    quant_qs4c32_f32(n, k, bl, (const float*)W.data(), (uint8_t*)rhs_native_mtx_qs4c32);
+        const size_t rhs_native_size_qs4c32 = n * num_blocks * num_bytes_per_block_qs4c32;
+        uint8_t* rhs_native_mtx_qs4c32 = new uint8_t[rhs_native_size_qs4c32];
 
-
-    const size_t lhs_ref_size_qa8d32 = m * num_blocks * num_bytes_per_block_qs8c32;
-    const size_t dst_ref_size_f32 = m * n * sizeof(float);
-
-    uint8_t* lhs_ref_mtx_qa8d32 = new uint8_t[lhs_ref_size_qa8d32];
-    uint8_t* dst_ref_mtx_f32 = new uint8_t[dst_ref_size_f32];
-
-    ref_quant_qs8d32_f32(m, k, bl, (const float*)X.data(), (uint8_t*)lhs_ref_mtx_qa8d32);
+        quant_qs4c32_f32(n, k, bl, (const float*)W.data(), (uint8_t*)rhs_native_mtx_qs4c32);
 
 
+        const size_t lhs_ref_size_qa8d32 = m * num_blocks * num_bytes_per_block_qs8c32;
+        const size_t dst_ref_size_f32 = m * n * sizeof(float);
+
+        uint8_t* lhs_ref_mtx_qa8d32 = new uint8_t[lhs_ref_size_qa8d32];
+        uint8_t* dst_ref_mtx_f32 = new uint8_t[dst_ref_size_f32];
+
+        ref_quant_qs8d32_f32(m, k, bl, (const float*)X.data(), (uint8_t*)lhs_ref_mtx_qa8d32);
 
 
-    const size_t lhs_packed_size = kai_get_lhs_packed_size_lhs_quant_pack_qsi8d32p_f32(m, k, bl, mr, kr, sr);
-    const size_t rhs_packed_size = kai_get_rhs_packed_size_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0(n, k, nr, kr, bl);
-    const size_t dst_size = ukernel.get_dst_size(m, n);
-
-    uint8_t* lhs_packed_mtx_qs8d32 = new uint8_t[lhs_packed_size];
-    uint8_t* rhs_packed_mtx_qs4c32 = new uint8_t[rhs_packed_size];
-    uint8_t* dst_act_mtx_f32 = new uint8_t[dst_size];
-
-    struct kai_rhs_pack_qs4cxs1s0_param params;
-    params.lhs_zero_point = 1;
-    params.rhs_zero_point = 8;
-    /*
-    kai_run_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0(
-            1, n, k,                                  // Dimensions
-            nr, kr, sr,                               // Packing arguments
-            bl,                                       // Block length
-            (const uint8_t*)(rhs_native_mtx_qs4c32),  // RHS
-            NULL,                                     // Bias
-            rhs_packed_mtx_qs4c32,                    // RHS packed
-            0, &params);
-    */
-   ref_matmul_f32_qs8d32_qs4c32(
-        m, n, k, bl, (const int8_t*)lhs_ref_mtx_qa8d32, (const uint8_t*)rhs_native_mtx_qs4c32, (float*)dst_ref_mtx_f32,
-        -FLT_MAX, FLT_MAX);
-
-    // If the RHS matrix contains constant values, the packing can be performed
-    // only once
 
 
-    auto start = std::chrono::high_resolution_clock::now();
+        const size_t lhs_packed_size = kai_get_lhs_packed_size_lhs_quant_pack_qsi8d32p_f32(m, k, bl, mr, kr, sr);
+        const size_t rhs_packed_size = kai_get_rhs_packed_size_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0(n, k, nr, kr, bl);
+        const size_t dst_size = ukernel.get_dst_size(m, n);
 
-    const size_t dst_stride = n * sizeof(float);
-    const size_t lhs_offset = ukernel.get_lhs_packed_offset(0, k, bl);
-    const size_t rhs_offset = ukernel.get_rhs_packed_offset(0, k, bl);
-    const size_t dst_offset = ukernel.get_dst_offset(0, 0, dst_stride);
+        uint8_t* lhs_packed_mtx_qs8d32 = new uint8_t[lhs_packed_size];
+        uint8_t* rhs_packed_mtx_qs4c32 = new uint8_t[rhs_packed_size];
+        uint8_t* dst_act_mtx_f32 = new uint8_t[dst_size];
 
-    const void* lhs_ptr = (const void*)((const char*)lhs_packed_mtx_qs8d32 + lhs_offset);
-    const void* rhs_ptr = (const void*)((const char*)rhs_packed_mtx_qs4c32 + rhs_offset);
-    float* dst_ptr = (float*)((uint8_t*)dst_act_mtx_f32 + dst_offset);
+        struct kai_rhs_pack_qs4cxs1s0_param params;
+        params.lhs_zero_point = 1;
+        params.rhs_zero_point = 8;
+        /*
+        kai_run_rhs_pack_nxk_qsi4c32pscalef16_qsu4c32s16s0(
+                1, n, k,                                  // Dimensions
+                nr, kr, sr,                               // Packing arguments
+                bl,                                       // Block length
+                (const uint8_t*)(rhs_native_mtx_qs4c32),  // RHS
+                NULL,                                     // Bias
+                rhs_packed_mtx_qs4c32,                    // RHS packed
+                0, &params);
+        */
+    ref_matmul_f32_qs8d32_qs4c32(
+            m, n, k, bl, (const int8_t*)lhs_ref_mtx_qa8d32, (const uint8_t*)rhs_native_mtx_qs4c32, (float*)dst_ref_mtx_f32,
+            -FLT_MAX, FLT_MAX);
 
-    ukernel.run_matmul(
-        m, n, k, bl,       // Dimensions
-        lhs_ptr,           // LHS packed
-        rhs_ptr,           // RHS packed
-        dst_ptr,           // DST
-        dst_stride,        // DST stride (row)
-        sizeof(float),     // DST stride (col)
-        -FLT_MAX, FLT_MAX  // Min and max for the clamp operation
-    );
+        // If the RHS matrix contains constant values, the packing can be performed
+        // only once
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << std::fixed << std::setprecision(3) << "Time taken: " << duration/3000.0 << " milliseconds" << std::endl;
-    
+
+        
+
+        const size_t dst_stride = n * sizeof(float);
+        const size_t lhs_offset = ukernel.get_lhs_packed_offset(0, k, bl);
+        const size_t rhs_offset = ukernel.get_rhs_packed_offset(0, k, bl);
+        const size_t dst_offset = ukernel.get_dst_offset(0, 0, dst_stride);
+
+        const void* lhs_ptr = (const void*)((const char*)lhs_packed_mtx_qs8d32 + lhs_offset);
+        const void* rhs_ptr = (const void*)((const char*)rhs_packed_mtx_qs4c32 + rhs_offset);
+        float* dst_ptr = (float*)((uint8_t*)dst_act_mtx_f32 + dst_offset);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        
+        ukernel.run_matmul(
+            m, n, k, bl,       // Dimensions
+            lhs_ptr,           // LHS packed
+            rhs_ptr,           // RHS packed
+            dst_ptr,           // DST
+            dst_stride,        // DST stride (row)
+            sizeof(float),     // DST stride (col)
+            -FLT_MAX, FLT_MAX  // Min and max for the clamp operation
+        );
+
+        auto end = std::chrono::high_resolution_clock::now();
+        double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
+        std::cout << "Time taken: " << duration << " microseconds" << std::endl;
+    }
     return 0;
 }

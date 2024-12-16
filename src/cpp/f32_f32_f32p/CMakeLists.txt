@@ -22,7 +22,18 @@ add_executable(benchmark_f32
     ${MATMUL_PACK_PATH}/kai_rhs_pack_kxn_f32p8x1biasf32_f32_f32_neon.c
 )
 
+add_executable(benchmark_f32_scaling
+    benchmark_f32_scaling.cpp
+    kernel.cpp
+    ${MATMUL_PATH}/kai_matmul_clamp_f32_f32_f32p8x1biasf32_6x8x4_neon_mla.c
+    ${MATMUL_PACK_PATH}/kai_rhs_pack_kxn_f32p8x1biasf32_f32_f32_neon.c
+)
+
 target_compile_options(benchmark_f32
+    PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1
+)
+
+target_compile_options(benchmark_f32_scaling
     PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1
 )
 

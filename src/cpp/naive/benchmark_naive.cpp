@@ -2,6 +2,7 @@
 #include <fstream>
 #include <chrono>
 #include <vector>
+#include "../common/sizes.cpp"
 #include "kernel.h"
 
 void loadMatrix(const std::string& filename, float* matrix, size_t rows, size_t cols) {
@@ -33,10 +34,10 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
     matrix_multiply_naive(X.data(), W.data(), Y.data(), activation_rows, activation_cols, weight_cols);
-    auto end = std::chrono::high_resolution_clock::now();
     
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "Time taken: " << duration << " milliseconds" << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
+    std::cout << "Time taken: " << duration << " microseconds" << std::endl;
 
     return 0;
 }
