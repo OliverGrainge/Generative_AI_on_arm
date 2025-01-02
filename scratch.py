@@ -819,40 +819,101 @@ class Int4WeightOnlyQuantizer(Quantizer):
         return model
 
 
+
+
+
+import torch.nn as nn
+
+class Int4WeightOnlyKAILinear(nn.Module):
+    def __init__(self, in_features, out_features, bias=True): 
+        super().__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+
+        self.register_buffer(
+            "weight",
+            torch.empty((torch.ops.aten.get_kai_weight_pack_int4_size(out_features,in_features,groupsize)), dtype=torch.uint8)
+        )
+
+        self.register_buffer(
+            "scales_and_zeros",
+            torch.empty((0), dtype=torch.float32)
+        )
+
+        if bias is not False: 
+            self.register_buffer(
+                "bias",
+                torch.empty((self.out_features), dtype=torch.float32)
+            )
+        else: 
+            self.register_buffer("bias", None)
+
+    def forward(self, x):
+        out = linear_forward_int4_symmetric_groupwise(x, self.weight, self.out_features, self.in_features)
+        if self.bias is not None:
+            out += self.bias 
+        return out 
+
+
+
+def quantize_linear_layer(layer):
+    fp_weight = layer.weight.detach()
+    out_features = layer.out_features
+    in_features = layer.in_features
+
+    w_int4x8, scales_and_zeros = prepare_int4_weight_and_scales_and_zeros(
+        fp_weight, 
+        groupsize, 
+        inner_k_tiles, 
+        "symmetric_groupwise", 
+        precision=torch.float32
+    )
+
+    weight_int4pack = torch.ops.aten._kai_weight_pack_int4(
+        w_int4x8, 
+        scales_and_zeros.float(), 
+        out_features, 
+        in_features, 
+        groupsize
+    )
+
+    use_bias = layer.bias is not None
+    layer4bit = Int4WeightOnlyKAILinear(in_features, out_features, use_bias)
+
+    layer4bit.weight = weight_int4pack
+    layer4bit.scales_and_zeros = scales_and_zeros
+    if use_bias:
+        layer4bit.bias.data.copy_(layer.bias.data)
+
+    return layer4bit
+
+def quantize_model(model):
+    for name, child in model.named_children():
+        if isinstance(child, nn.Linear):
+            # Quantize the linear layer
+            quantized_layer = quantize_linear_layer(child)
+            setattr(model, name, quantized_layer)
+        else:
+            # Recursively apply to child modules
+            quantize_model_inplace(child)
+    return model
+
+
 if __name__ == "__main__":
-    batch_size = 1
-    in_features= 128 
-    out_features = 256
-    precision = torch.float32
-    groupsize = 32
+    import torch 
+    import torch.nn as nn 
+    groupsize = 32 
     inner_k_tiles = 8 
-    padding_allowed = False
-    scheme = "symmetric_groupwise"
-
-    import transformers
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-
-    model = AutoModelForCausalLM.from_pretrained("apple/OpenELM-270M-Instruct", trust_remote_code=True)
-
-    prompt = "Arm is a company that" 
-    tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf", trust_remote_code=True)
-    inputs = tokenizer(prompt, return_tensors="pt")
-
-    generated_ids = model.generate(inputs['input_ids'], max_length=20)
-
-    # Decode the generated text
-    generated_text_fp = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-
-    quantizer = Int4WeightOnlyQuantizer(groupsize=groupsize, inner_k_tiles=inner_k_tiles, padding_allowed=padding_allowed, scheme=scheme, precision=precision)
-    qmodel = quantizer.quantize(model)
-
-    # Generate text
-    generated_ids = qmodel.generate(inputs['input_ids'], max_length=20)
-
-    # Decode the generated text
-    generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-    print(generated_text_fp)
-    print(generated_text)
+    input = torch.randn(1, 128)
+    layer = nn.Linear(128, 256, bias=False)
+    model = nn.Sequential(layer)
+    out = model(input)
+    quantize_model(model)
+    out2 = model(input)
+    print(out2.flatten()[:5])
+    print(out.flatten()[:5])
+    
+    
 
     #for name, param in qmodel.state_dict().items():
     #    print(name, param.dtype)
