@@ -117,6 +117,28 @@ rm -rf build
 python3.10 setup.py install
 cd ..
 
+#############################################################################
+# STEP 15: Clone and build processwatch (if not already cloned)
+#############################################################################
+echo "======================================================================="
+echo "  15. Clone and build 'processwatch'"
+echo "======================================================================="
+
+# Just in case, re-install the dev packages, though they should already be present:
+sudo apt-get update
+sudo apt-get install -y libelf-dev cmake clang llvm llvm-dev
+
+if [ ! -d "processwatch" ]; then
+    git clone --recursive https://github.com/intel/processwatch.git
+else
+    echo "processwatch folder already exists. Skipping clone."
+fi
+
+cd processwatch
+./build.sh -b
+cd ..
+#############################################################################
+
 echo "======================================================================="
 echo "Setup script completed successfully!"
 echo "Activate your environment using: source torch_env/bin/activate"
