@@ -308,7 +308,7 @@ int main() {
 
         auto end = std::chrono::high_resolution_clock::now();
         double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-        std::cout << "Time taken: " << duration << " microseconds" << std::endl;
+        //std::cout << "Time taken: " << duration << " microseconds" << std::endl;
         csv_file << size << "," << duration << "\n";
     }
     
