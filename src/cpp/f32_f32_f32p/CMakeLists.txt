@@ -38,15 +38,15 @@ add_executable(kai_f32_inf
 )
 
 target_compile_options(benchmark_f32
-    PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1
+    PRIVATE -march=armv8.4-a -mtune=neoverse-v1
 )
 
 target_compile_options(benchmark_f32_scaling
-    PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1
+    PRIVATE -march=armv8.4-a -mtune=neoverse-v1
 )
 
 target_compile_options(kai_f32_inf
-    PRIVATE -march=armv8.4-a+sve -mtune=neoverse-v1
+    PRIVATE -march=armv8.4-a -mtune=neoverse-v1
 )
 
 target_compile_definitions(benchmark_f32

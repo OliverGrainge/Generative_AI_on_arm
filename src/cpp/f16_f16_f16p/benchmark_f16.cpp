@@ -74,7 +74,7 @@ int main() {
     float16_t* bias = new float16_t[N];
     std::fill_n(bias, N, 0.0f);
     float16_t* dst = Y.data();
-    auto start = std::chrono::high_resolution_clock::now();
+    
     
     kai_run_rhs_pack_kxn_f16p16x1biasf16_f16_f16_neon(
         1, N, K, nr, kr, sr,  // Packing arguments
@@ -85,7 +85,7 @@ int main() {
         rhs_packed,           // RHS packed
         0, NULL);
 
-
+    auto start = std::chrono::high_resolution_clock::now();
     ukernel.run_matmul(
         M, N, K,           // Dimensions
         lhs,               // LHS

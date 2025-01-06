@@ -41,20 +41,20 @@ sudo apt install -y gcc g++ build-essential google-perftools \
     python3.10 python3.10-venv python3.10-dev
 
 echo "======================================================================="
-echo "  6. Create (or recreate) Python 3.10 virtual environment 'torch_env'"
+echo "  6. Create (or recreate) Python 3.10 virtual environment 'graviton_env'"
 echo "======================================================================="
-if [ -d torch_env ]; then
-    echo "Removing existing virtual environment 'torch_env'..."
-    rm -rf torch_env
+if [ -d graviton_env ]; then
+    echo "Removing existing virtual environment 'graviton_env'..."
+    rm -rf graviton_env
 fi
 
-python3.10 -m venv torch_env
+python3.10 -m venv graviton_env
 
 echo "======================================================================="
 echo "  7. Activate the virtual environment"
 echo "======================================================================="
 # shellcheck disable=SC1091
-source torch_env/bin/activate
+source graviton_env/bin/activate
 
 echo "======================================================================="
 echo "  8. Upgrade pip"
@@ -141,5 +141,5 @@ cd ..
 
 echo "======================================================================="
 echo "Setup script completed successfully!"
-echo "Activate your environment using: source torch_env/bin/activate"
+echo "Activate your environment using: source graviton_env/bin/activate"
 echo "======================================================================="
