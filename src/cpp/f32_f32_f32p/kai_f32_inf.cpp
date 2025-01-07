@@ -91,7 +91,7 @@ int main() {
 
     
     auto end = std::chrono::high_resolution_clock::now();
-    double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
+    double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
     std::cout << "Time taken: " << duration << " microseconds" << std::endl;
     
     return 0;
