@@ -21,8 +21,8 @@ void loadMatrix(const std::string& filename, float* matrix, size_t rows, size_t 
 
 int main() {
     // Declare matrix dimensions
-    const size_t activation_rows = 6, activation_cols = 1280;
-    const size_t weight_rows = 1280, weight_cols = 32000;
+    const size_t activation_rows = 23, activation_cols = 3072;
+    const size_t weight_rows = 3072, weight_cols = 32000;
 
     std::vector<float> X(activation_rows * activation_cols);
     std::vector<float> W(weight_rows * weight_cols);
@@ -36,8 +36,8 @@ int main() {
     matrix_multiply_naive(X.data(), W.data(), Y.data(), activation_rows, activation_cols, weight_cols);
     
     auto end = std::chrono::high_resolution_clock::now();
-    double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "Time taken: " << duration << " microseconds" << std::endl;
+    double duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+    std::cout << "Time taken: " << duration << " seconds" << std::endl;
 
     return 0;
 }
