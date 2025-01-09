@@ -56,7 +56,7 @@ int main() {
         double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
         // Print and log the results
-        //std::cout << "Size: " << size << ", Time taken: " << duration << " microseconds" << std::endl;
+        //std::cout << "Size: " << size << ", Time taken: " << duration << " milliseconds" << std::endl;
         csv_file << size << "," << duration << "\n";
     }
 
