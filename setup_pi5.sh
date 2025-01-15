@@ -1,16 +1,33 @@
 #!/bin/bash
 
-# Update and upgrade the package list
-echo "Updating and upgrading the system..."
+set -e
+
+#############################################################################
+# STEP 1: Update and upgrade the system
+#############################################################################
+echo "======================================================================="
+echo "  1. Update and upgrade the system"
+echo "======================================================================="
 sudo apt update
 sudo apt upgrade -y
 
-# Install essential development packages
-echo "Installing required packages..."
-sudo apt install -y wget build-essential libssl-dev libbz2-dev libreadline-dev libsqlite3-dev \
-zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libgdbm-dev liblzma-dev uuid-dev tk-dev \
-linux-perf cmake
-# Verify perf installation
+#############################################################################
+# STEP 2: Install essential development packages
+#############################################################################
+echo "======================================================================="
+echo "  2. Install essential development packages"
+echo "======================================================================="
+sudo apt install -y \
+    wget build-essential libssl-dev libbz2-dev libreadline-dev libsqlite3-dev \
+    zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libgdbm-dev \
+    liblzma-dev uuid-dev tk-dev linux-perf cmake
+
+#############################################################################
+# STEP 3: Verify perf installation
+#############################################################################
+echo "======================================================================="
+echo "  3. Verify perf installation"
+echo "======================================================================="
 if command -v perf >/dev/null 2>&1; then
     echo "perf installed successfully."
 else
@@ -18,7 +35,12 @@ else
     exit 1
 fi
 
-# Check if Python 3.12 is already installed
+#############################################################################
+# STEP 4: Check and install Python 3.12 if necessary
+#############################################################################
+echo "======================================================================="
+echo "  4. Check and install Python 3.12 if necessary"
+echo "======================================================================="
 if ! python3.12 --version >/dev/null 2>&1; then
     echo "Downloading and building Python 3.12..."
     cd /tmp
@@ -36,19 +58,50 @@ else
     echo "Python 3.12 is already installed. Skipping build."
 fi
 
-# Check if virtual environment already exists
-if [ ! -d venv ]; then
+#############################################################################
+# STEP 5: Create Python virtual environment
+#############################################################################
+echo "======================================================================="
+echo "  5. Create Python virtual environment"
+echo "======================================================================="
+if [ ! -d pi5_env ]; then
     echo "Creating Python virtual environment..."
-    python3.12 -m venv venv
+    python3.12 -m venv pi5_env
 else
     echo "Virtual environment already exists. Skipping creation."
 fi
 
-# Activate the virtual environment and install Python packages
-echo "Activating virtual environment and installing required Python packages..."
-source venv/bin/activate
+#############################################################################
+# STEP 6: Activate the virtual environment and install packages
+#############################################################################
+echo "======================================================================="
+echo "  6. Activate the virtual environment and install packages"
+echo "======================================================================="
+# shellcheck disable=SC1091
+source pi5_env/bin/activate
+
+echo "======================================================================="
+echo "  7. Upgrade pip"
+echo "======================================================================="
 python3.12 -m pip install --upgrade pip
-python3.12 -m pip install --upgrade numpy matplotlib pandas torch transformers jupyterlab ipykernel ipywidgets seaborn
 
+echo "======================================================================="
+echo "  8. Install required Python packages"
+echo "======================================================================="
+python3.12 -m pip install --upgrade \
+    numpy \
+    matplotlib \
+    pandas \
+    torch \
+    transformers \
+    jupyterlab \
+    ipykernel \
+    ipywidgets \
+    seaborn \
+    sentencepiece
+
+#############################################################################
+echo "======================================================================="
 echo "Setup script completed successfully!"
-
+echo "Activate your environment using: source pi5_env/bin/activate"
+echo "======================================================================="
