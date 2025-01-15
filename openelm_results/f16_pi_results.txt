@@ -1,0 +1,12 @@
+| model                          |       size |     params | backend    | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | -------------------: |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       1 |          pp12 |        198.08 ± 0.53 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       1 |           tg6 |         25.90 ± 0.06 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       2 |          pp12 |        198.36 ± 0.33 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       2 |           tg6 |         24.84 ± 0.62 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       3 |          pp12 |        194.55 ± 0.33 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       3 |           tg6 |         24.94 ± 0.59 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       4 |          pp12 |        198.21 ± 0.31 |
+| openelm 3B F16                 |   5.66 GiB |     3.04 B | Metal,BLAS |       4 |           tg6 |         25.70 ± 0.11 |
+
+build: 0ccd7f3 (1)
