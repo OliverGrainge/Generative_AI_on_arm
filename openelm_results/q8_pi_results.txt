@@ -1,12 +1,12 @@
 | model                          |       size |     params | backend    | threads |          test |                  t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | -------------------: |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       1 |          pp12 |        183.90 ± 0.33 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       1 |           tg6 |         42.96 ± 0.22 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       2 |          pp12 |        184.56 ± 0.91 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       2 |           tg6 |         42.91 ± 0.25 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       3 |          pp12 |        184.65 ± 0.71 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       3 |           tg6 |         43.17 ± 0.32 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       4 |          pp12 |        184.01 ± 0.73 |
-| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | Metal,BLAS |       4 |           tg6 |         42.75 ± 0.45 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       1 |          pp12 |          4.88 ± 0.00 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       1 |           tg6 |          3.28 ± 0.01 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       2 |          pp12 |          9.51 ± 0.01 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       2 |           tg6 |          3.58 ± 0.03 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       3 |          pp12 |         13.55 ± 0.24 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       3 |           tg6 |          3.28 ± 0.04 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       4 |          pp12 |         16.77 ± 0.09 |
+| openelm 3B Q8_0                |   3.01 GiB |     3.04 B | CPU        |       4 |           tg6 |          3.00 ± 0.03 |
 
-build: 0ccd7f3 (1)
+build: 1d850433 (4488)
