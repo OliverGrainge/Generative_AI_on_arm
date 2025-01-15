@@ -26,5 +26,7 @@ for line in lines:
 # Convert to DataFrame
 df = pd.DataFrame(data, columns=["Model", "Size (GiB)", "Params (B)", "Threads", "Test", "Speed (t/s)", "Error (t/s)"])
 
+
+
 output_file = results_file.replace('.txt', '.csv')
 df.to_csv(output_file, index=False)
