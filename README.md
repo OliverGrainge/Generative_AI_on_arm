@@ -22,7 +22,7 @@ In each lab, you will learn to optimize AI inference using ARM-specific intrinsi
 2. **Open the course material**  
    The course material is provided as Jupyter notebooks. To access the content:
    ```bash
-   source venv/bin/activate
+   source pi5_env/bin/activate
    jupyter lab
    ```
 
