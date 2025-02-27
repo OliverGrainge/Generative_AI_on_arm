@@ -56,7 +56,7 @@ By the end of this course, you will have a strong foundation in deploying high-p
    - **Select key pair**: Create a key for SSH connection (e.g., `yourkey.pem`).
    - **Choose an AMI**: Use the `Ubuntu 24.04` AMI as the operating system.
    - **Instance type**: Select `m7g.xlarge` (Graviton-based instance with ARM Neoverse cores).
-   - **Storage**: Add 64 GB of root storage.
+   - **Storage**: Add 32 GB of root storage.
 
 2. **Connect to the instance via SSH**  
    Use the following command to establish an SSH connection (replace with your instance details):
