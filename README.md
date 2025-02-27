@@ -4,7 +4,7 @@ Welcome to **Generative AI on ARM**, a hands-on course designed to help you opti
 
 ## Course Structure
 
-This course consists of three hands-on labs and four theoretical lectures.
+This course consists of three hands-on labs and four lectures.
 
 ### Hands-On Labs
 - **Lab 1**: Optimizing generative AI on mobile devices, such as the Raspberry Pi 5.
