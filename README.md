@@ -1,9 +1,10 @@
 # **Generative AI on ARM**
 
-Welcome to the **Generative AI on ARM** course! This course is designed to help you master the optimization of generative AI workloads on ARM architectures through hands-on labs. There are two labs available:
+Welcome to the **Generative AI on ARM** course! This course is designed to help you master the optimization of generative AI workloads on ARM architectures through hands-on labs. There are three labs available:
 
 - **Lab 1**: Focuses on mobile devices, such as the Raspberry Pi 5.
 - **Lab 2**: Designed for ARM-based servers, such as AWS Graviton instances.
+- **Lab 3**: Compares the challenges and comparisons between Cloud based and Edge based deployment.
 
 In each lab, you will learn to optimize AI inference using ARM-specific intrinsics and techniques to achieve efficient performance.
 
