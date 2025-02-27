@@ -138,7 +138,7 @@ else
 fi
 sudo apt-get install -y linux-tools-generic
 cd processwatch
-./build.sh -b
+./build.sh
 cd ..
 #############################################################################
 
