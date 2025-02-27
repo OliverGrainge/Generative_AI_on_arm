@@ -1,12 +1,30 @@
 # **Generative AI on ARM**
 
-Welcome to the **Generative AI on ARM** course! This course is designed to help you master the optimization of generative AI workloads on ARM architectures through hands-on labs. There are three labs available:
+Welcome to **Generative AI on ARM**, a hands-on course designed to help you optimize generative AI workloads on ARM architectures. Through practical labs and structured lectures, you will learn how to deploy AI models efficiently across different ARM-based environments.
 
-- **Lab 1**: Focuses on mobile devices, such as the Raspberry Pi 5.
-- **Lab 2**: Designed for ARM-based servers, such as AWS Graviton instances.
-- **Lab 3**: Compares the challenges and comparisons between Cloud based and Edge based deployment.
+## Course Structure
 
-In each lab, you will learn to optimize AI inference using ARM-specific intrinsics and techniques to achieve efficient performance.
+This course consists of three hands-on labs and four theoretical lectures.
+
+### Hands-On Labs
+- **Lab 1**: Optimizing generative AI on mobile devices, such as the Raspberry Pi 5.
+- **Lab 2**: Deploying AI workloads on ARM-based cloud servers, including AWS Graviton.
+- **Lab 3**: Comparing cloud vs. edge inference, analyzing challenges and trade-offs.
+
+### Lecture Series
+Inside the `slides/` folder, you will find four lectures covering the key concepts and challenges in AI inference on ARM:
+
+1. **Challenges Facing Cloud and Edge GenAI Inference** – Understanding the limitations and constraints of AI inference in different environments.
+2. **Generative AI Models** – Exploring model architectures, training methodologies, and deployment considerations.
+3. **ML Frameworks and Optimized Libraries** – A deep dive into AI software stacks, including PyTorch, ONNX Runtime, and ARM-specific optimizations.
+4. **Optimization for CPU Inference** – Techniques such as quantization, pruning, and leveraging SIMD instructions for faster AI performance.
+
+## What You'll Learn
+
+You will learn how to optimize AI inference using ARM-specific techniques such as SIMD (SVE, NEON) and low-bit quantization. The course covers practical strategies for running generative AI efficiently on mobile, edge, and cloud-based ARM platforms. You will also explore the trade-offs between cloud and edge deployment, gaining both theoretical knowledge and hands-on skills.
+
+By the end of this course, you will have a strong foundation in deploying high-performance AI models on ARM hardware.
+
 
 ---
 
@@ -27,7 +45,7 @@ In each lab, you will learn to optimize AI inference using ARM-specific intrinsi
    jupyter lab
    ```
 
-3. Follow the instructions provided in the notebooks to complete the lab.
+3. Follow the instructions provided in `lab1.ipynb` to complete the lab.
 
 ---
 
@@ -72,18 +90,22 @@ In each lab, you will learn to optimize AI inference using ARM-specific intrinsi
    ```bash
    jupyter lab
    ```
-   Copy the link provided in the terminal output, open it in your browser, and follow the instructions in the notebooks.
+   Copy the link provided in the terminal output, open it in your local browser, and follow the instructions in the notebooks.
+
+---
+
+### **Lab 3: Comparative Inference Benchmarking on ARM Server and Edge Devices**
+
+1. Follow the setup stpes for `lab1` on your local raspberry pi.
+2. Follow the setup stpes for `lab2` on your raspberry pi, to create and connect to a cloud instance.
+3. Open `lab3.ipynb` to find the instructions for completing the lab 
 
 ---
 
 ## **Additional Notes**
+- To complete this course you are required to have access to a Raspberry Pi-5, for the cloud sections, AWS can be utilised. 
+- For Lab 2 and 3 make sure to terminate the EC2 instance when you're done to avoid unnecessary charges.
 
-- Ensure that you have the necessary permissions to launch AWS instances and SSH into them.
-- The labs require an active internet connection for downloading models and dependencies.
-- For Lab 2, make sure to terminate the EC2 instance when you're done to avoid unnecessary charges.
-
----
-
-Happy learning!
+**Happy learning!**
 
 
