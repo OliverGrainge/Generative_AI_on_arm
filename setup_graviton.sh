@@ -108,6 +108,7 @@ wget https://github.com/ArmDeveloperEcosystem/PyTorch-arm-patches/raw/main/torch
 python3.10 -m pip install --force-reinstall \
   torch-2.5.0.dev20240828+cpu-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
 
+
 echo "======================================================================="
 echo "  14. Re-install torchao from 'ao' source"
 echo "======================================================================="
@@ -117,7 +118,7 @@ rm -rf build
 python3.10 setup.py install
 cd ..
 
-#############################################################################
+####################
 # STEP 15: Clone and build processwatch (if not already cloned)
 #############################################################################
 echo "======================================================================="
@@ -127,13 +128,15 @@ echo "======================================================================="
 # Just in case, re-install the dev packages, though they should already be present:
 sudo apt-get update
 sudo apt-get install -y libelf-dev cmake clang llvm llvm-dev
+sudo apt-get update && sudo apt-get upgrade
 
 if [ ! -d "processwatch" ]; then
-    git clone --recursive https://github.com/intel/processwatch.git
+    #git clone --recursive https://github.com/intel/processwatch.git
+    git clone --recursive https://github.com/grahamwoodward/processwatch.git
 else
     echo "processwatch folder already exists. Skipping clone."
 fi
-
+sudo apt-get install -y linux-tools-generic
 cd processwatch
 ./build.sh -b
 cd ..
