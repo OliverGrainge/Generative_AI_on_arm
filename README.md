@@ -38,7 +38,7 @@ By the end of this course, you will have a strong foundation in deploying high-p
    ./setup.sh
    ```
 2. **Login to a Hugging face account**
-  ```bash
+   ```bash
    huggingface-cli login
    ```
 3. **Open the course material**  
