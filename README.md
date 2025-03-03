@@ -37,15 +37,18 @@ By the end of this course, you will have a strong foundation in deploying high-p
    ```bash
    ./setup.sh
    ```
-
-2. **Open the course material**  
+2. **Login to a Hugging face account**
+  ```bash
+   huggingface-cli login
+   ```
+3. **Open the course material**  
    The course material is provided as Jupyter notebooks. To access the content:
    ```bash
    source pi5_env/bin/activate
    jupyter lab
    ```
 
-3. Follow the instructions provided in `lab1.ipynb` to complete the lab.
+4. Follow the instructions provided in `lab1.ipynb` to complete the lab.
 
 ---
 
