@@ -70,7 +70,7 @@ python3.10 -m pip install --upgrade \
     numpy \
     matplotlib \
     pandas \
-    transformers \
+    transformers==4.39.3 \
     jupyterlab \
     ipykernel \
     ipywidgets \
