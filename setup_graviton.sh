@@ -142,6 +142,8 @@ sudo apt-get install -y linux-tools-generic
 cd processwatch
 ./build.sh
 cd ..
+echo "ubuntu ALL=(ALL) NOPASSWD: /home/ubuntu/processwatch/processwatch" | sudo tee /etc/sudoers.d/99-processwatch
+sudo chmod 0440 /etc/sudoers.d/99-processwatch
 #############################################################################
 
 echo "======================================================================="
