@@ -58,7 +58,7 @@ By the end of this course, you will have a strong foundation in deploying high-p
    - Go to Amazon EC2 and create a new instance.
    - **Select key pair**: Create a key for SSH connection (e.g., `yourkey.pem`).
    - **Choose an AMI**: Use the `Ubuntu 22.04` AMI as the operating system.
-   - **Instance type**: Select `m7g.xlarge` (Graviton-based instance with ARM Neoverse cores).
+   - **Instance type**: Select `m7g.2xlarge` (Graviton-based instance with ARM Neoverse cores).
    - **Storage**: Add 32 GB of root storage.
 
 2. **Connect to the instance via SSH**  
