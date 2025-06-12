@@ -3,10 +3,12 @@
 set -e
 
 echo "======================================================================="
-echo "  1. Update and upgrade the system"
+echo "  1. Update and upgrade the system (non-interactive)"
 echo "======================================================================="
-sudo apt update
-sudo apt upgrade -y
+export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_MODE=a          # or NEEDRESTART_SUSPEND=1
+sudo apt-get update -y
+sudo apt-get upgrade -y
 
 echo "======================================================================="
 echo "  2. Add essential development packages"
